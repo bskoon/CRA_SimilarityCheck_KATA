@@ -31,6 +31,8 @@ class SimilarityCheckerTest {
         assertIllegalInput("BC", null);
         assertIllegalInput("", "ASD");
         assertIllegalInput("DSA", "");
+        assertIllegalInput("asd", "ABC");
+        assertIllegalInput("DAC", "AcD");
     }
 
     @Test

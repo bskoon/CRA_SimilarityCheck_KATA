@@ -42,13 +42,29 @@ public class SimilarityChecker {
         if (isStringLengthZero(firstString, secondString)) {
             throw new IllegalArgumentException();
         }
+        if (!isUpperCase(firstString, secondString)) {
+            throw new IllegalArgumentException();
+        }
     }
 
-    private static boolean isStringLengthZero(String firstString, String secondString) {
+    private boolean isStringLengthZero(String firstString, String secondString) {
         return firstString.length() == 0 || secondString.length() == 0;
     }
 
-    private static boolean isNullString(String firstString, String secondString) {
+    private boolean isNullString(String firstString, String secondString) {
         return firstString == null || secondString == null;
+    }
+    private boolean isUpperCase(String firstString, String secondString) {
+        for (int idx = 0; idx < firstString.length(); idx++) {
+            if (firstString.charAt(idx) < 'A' || firstString.charAt(idx) > 'Z') {
+                return false;
+            }
+        }
+        for (int idx = 0; idx < secondString.length(); idx++) {
+            if (secondString.charAt(idx) < 'A' || secondString.charAt(idx) > 'Z') {
+                return false;
+            }
+        }
+        return true;
     }
 }
