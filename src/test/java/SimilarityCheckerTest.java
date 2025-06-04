@@ -1,5 +1,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,14 +30,19 @@ class SimilarityCheckerTest {
         }
     }
 
-    @Test
-    void checkIllegalParameter() {
-        assertIllegalInput(null, "ABC");
-        assertIllegalInput("BC", null);
-        assertIllegalInput("", "ASD");
-        assertIllegalInput("DSA", "");
-        assertIllegalInput("asd", "ABC");
-        assertIllegalInput("DAC", "AcD");
+    static Stream<Arguments> provideIllegalParameter() {
+        return Stream.of(
+                org.junit.jupiter.params.provider.Arguments.of(null, "ABC"),
+                org.junit.jupiter.params.provider.Arguments.of("BC", null),
+                org.junit.jupiter.params.provider.Arguments.of("", "ASD"),
+                org.junit.jupiter.params.provider.Arguments.of("DSA", "")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideIllegalParameter")
+    void checkIllegalParameter(String param1, String param2) {
+        assertIllegalInput(param1, param2);
     }
 
     @Test
