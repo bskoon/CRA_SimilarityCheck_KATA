@@ -1,5 +1,3 @@
-import java.nio.file.attribute.UserPrincipalNotFoundException;
-
 public class SimilarityChecker {
     public double getLengthScore(String firstString, String secondString) {
         assertIllegalArgument(firstString, secondString);
@@ -21,13 +19,7 @@ public class SimilarityChecker {
 
     private double gapPerLen(int firstStringLen, int secondStringLen) {
         int stringLenDiff = Math.abs(firstStringLen - secondStringLen);
-        int shorterLength = 0;
-
-        if (firstStringLen <= secondStringLen) {
-            shorterLength = firstStringLen;
-        } else {
-            shorterLength = secondStringLen;
-        }
+        int shorterLength = Math.min(firstStringLen, secondStringLen);
 
         return (double) stringLenDiff / shorterLength;
     }
@@ -44,11 +36,19 @@ public class SimilarityChecker {
     }
 
     private void assertIllegalArgument(String firstString, String secondString) {
-        if (firstString == null || secondString == null) {
+        if (isNullString(firstString, secondString)) {
             throw new IllegalArgumentException();
         }
-        if (firstString.length() == 0 || secondString.length() == 0) {
+        if (isStringLengthZero(firstString, secondString)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    private static boolean isStringLengthZero(String firstString, String secondString) {
+        return firstString.length() == 0 || secondString.length() == 0;
+    }
+
+    private static boolean isNullString(String firstString, String secondString) {
+        return firstString == null || secondString == null;
     }
 }
