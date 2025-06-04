@@ -12,19 +12,39 @@ class SimilarityCheckerTest {
     }
 
     @Test
+    void createSimilarityChecker() {
+        assertNotNull(similarityChecker);
+    }
+
+    private void assertIllegalInput(String str1, String str2) {
+        try {
+            double score = similarityChecker.getLengthScore(str1, str2);
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+    }
+
+    @Test
+    void checkIllegalParameter() {
+        assertIllegalInput(null, "ABC");
+        assertIllegalInput("BC", null);
+        assertIllegalInput("", "ASD");
+        assertIllegalInput("DSA", "");
+    }
+
+    @Test
     void lengthSame() {
-        double lenScore = similarityChecker.getLengthScore("ASD", "DSA");
-        assertEquals(60, lenScore);
+        assertEquals(60, similarityChecker.getLengthScore("ASD", "DSA"));
     }
     @Test
     void lengthOverTwice() {
-        double lenScore = similarityChecker.getLengthScore("A", "BB");
-        assertEquals(0, lenScore);
+        assertEquals(0, similarityChecker.getLengthScore("A", "BB"));
     }
 
     @Test
     void lengthSubScoreTest() {
-        double lenScore = similarityChecker.getLengthScore("AAABB", "BAA");
-        assertEquals((1.0-2.0/3.0)*60.0, lenScore);
+        assertEquals((1.0-2.0/3.0)*60.0, similarityChecker.getLengthScore("AAABB", "BAA"));
+        assertEquals((1.0-1.0/2.0)*60.0, similarityChecker.getLengthScore("AA", "AAE"));
     }
 }
