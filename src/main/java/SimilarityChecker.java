@@ -19,12 +19,12 @@ public class SimilarityChecker {
     }
 
     private double lengthScore(int A, int B) {
-        double diffRatio = (double) (A - B) / B;
-        return (1.0 - diffRatio) * MAX_SCORE_LENGTH;
+        double gap = A - B;
+        return (1.0 - gap / B) * MAX_SCORE_LENGTH;
     }
 
-    private static boolean checkOverDoubleLength(int largerLen, int smallerLen) {
-        return largerLen >= smallerLen * 2;
+    private boolean checkOverDoubleLength(int A, int B) {
+        return A >= B * 2;
     }
 
     private void assertIllegalArgument(String firstString, String secondString) {
