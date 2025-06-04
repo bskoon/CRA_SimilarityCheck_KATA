@@ -13,12 +13,18 @@ class SimilarityCheckerTest {
 
     @Test
     void lengthSame() {
-        int lenScore = similarityChecker.getLengthScore("ASD", "DSA");
+        double lenScore = similarityChecker.getLengthScore("ASD", "DSA");
         assertEquals(60, lenScore);
     }
     @Test
     void lengthOverTwice() {
-        int lenScore = similarityChecker.getLengthScore("A", "BB");
+        double lenScore = similarityChecker.getLengthScore("A", "BB");
         assertEquals(0, lenScore);
+    }
+
+    @Test
+    void lengthSubScoreTest() {
+        double lenScore = similarityChecker.getLengthScore("AAABB", "BAA");
+        assertEquals((1.0-2.0/3.0)*60.0, lenScore);
     }
 }
