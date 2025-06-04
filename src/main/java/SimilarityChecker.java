@@ -24,8 +24,7 @@ public class SimilarityChecker {
     }
 
     private static boolean checkOverDoubleLength(int largerLen, int smallerLen) {
-        if (largerLen >= smallerLen * 2) return true;
-        return false;
+        return largerLen >= smallerLen * 2;
     }
 
     private void assertIllegalArgument(String firstString, String secondString) {
