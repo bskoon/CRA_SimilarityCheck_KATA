@@ -1,12 +1,20 @@
 public class SimilarityChecker {
-    public int getLengthScore(String asd, String das) {
-        if (asd.length() == das.length()) {
+    public int getLengthScore(String firstString, String secondString) {
+        int firstStringLen = firstString.length();
+        int secondStringLen = secondString.length();
+
+        if (firstStringLen == secondStringLen) {
             return 60;
-        } else if (asd.length() > das.length() * 2) {
-            return 0;
-        } else if (asd.length() * 2 > das.length()) {
+        } else if (checkOverDoubleLength(firstStringLen, secondStringLen)) {
             return 0;
         }
+
         return 0;
+    }
+
+    private static boolean checkOverDoubleLength(int firstStringLen, int secondStringLen) {
+        if (firstStringLen > secondStringLen * 2) return true;
+        if (firstStringLen * 2 > secondStringLen) return true;
+        return false;
     }
 }
