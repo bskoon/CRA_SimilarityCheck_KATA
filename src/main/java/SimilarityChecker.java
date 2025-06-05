@@ -5,6 +5,11 @@ public class SimilarityChecker {
 
     public static final double MAX_SCORE_LENGTH = 60.0;
 
+    public double getScore(String firstString, String secondString) {
+        return getLengthScore(firstString, secondString)
+                + getAlphaScore(firstString, secondString);
+    }
+
     public double getLengthScore(String firstString, String secondString) {
         assertIllegalArgument(firstString, secondString);
 

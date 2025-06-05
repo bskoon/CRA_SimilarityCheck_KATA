@@ -88,4 +88,12 @@ class SimilarityCheckerTest {
     void alphaSubScore() {
         assertEquals(20.0, similarityChecker.getAlphaScore("AA","AAE"));
     }
+
+    void totalScore() {
+        assertEquals(100.0, similarityChecker.getScore("ASD","DSA"));
+        assertEquals(60.0, similarityChecker.getScore("ABC","DEF"));
+        assertEquals(40.0, similarityChecker.getScore("AAAA","AA"));
+        assertEquals(50.0, similarityChecker.getScore("AA","AAE"));
+        assertEquals((1.0-2.0/3.0)*60.0+40.0, similarityChecker.getScore("AAABB","BBA"));
+    }
 }
