@@ -1,20 +1,54 @@
 import java.util.HashMap;
-import java.util.IllformedLocaleException;
+import java.util.Spliterator;
 
-public class SimilarityChecker {
+abstract class SubScore {
+    protected static final double MAX_SCORE = 0.0;
 
-    public static final double MAX_SCORE_LENGTH = 60.0;
-
-    public double getScore(String firstString, String secondString) {
-        return getLengthScore(firstString, secondString)
-                + getAlphaScore(firstString, secondString);
+    public double getScore(String str1, String str2) {
+        return MAX_SCORE;
     }
 
-    public double getLengthScore(String firstString, String secondString) {
-        assertIllegalArgument(firstString, secondString);
+    protected void assertIllegalArgument(String firstString, String secondString) {
+        if (isNullString(firstString, secondString)) {
+            throw new IllegalArgumentException();
+        }
+        if (isStringLengthZero(firstString, secondString)) {
+            throw new IllegalArgumentException();
+        }
+    }
 
-        int firstStringLen = firstString.length();
-        int secondStringLen = secondString.length();
+    private boolean isNullString(String firstString, String secondString) {
+        return firstString == null || secondString == null;
+    }
+
+    private boolean isStringLengthZero(String firstString, String secondString) {
+        return firstString.length() == 0 || secondString.length() == 0;
+    }
+
+    protected boolean isUpperCase(String firstString, String secondString) {
+        for (int idx = 0; idx < firstString.length(); idx++) {
+            if (firstString.charAt(idx) < 'A' || firstString.charAt(idx) > 'Z') {
+                return false;
+            }
+        }
+        for (int idx = 0; idx < secondString.length(); idx++) {
+            if (secondString.charAt(idx) < 'A' || secondString.charAt(idx) > 'Z') {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+class LengthScore extends SubScore {
+    private static final double MAX_SCORE = 60.0;
+
+    @Override
+    public double getScore(String str1, String str2) {
+        assertIllegalArgument(str1, str2);
+
+        int firstStringLen = str1.length();
+        int secondStringLen = str2.length();
 
         int A = Math.max(firstStringLen, secondStringLen);
         int B = Math.min(firstStringLen, secondStringLen);
@@ -28,14 +62,19 @@ public class SimilarityChecker {
 
     private double lengthScore(int A, int B) {
         double gap = A - B;
-        return (1.0 - gap / B) * MAX_SCORE_LENGTH;
+        return (1.0 - gap / B) * MAX_SCORE;
     }
 
     private boolean checkOverDoubleLength(int A, int B) {
         return A >= B * 2;
     }
+}
 
-    public double getAlphaScore(String firstString, String secondString) {
+class AlphaScore extends SubScore {
+    private static final double MAX_SCORE = 40.0;
+
+    @Override
+    public double getScore(String firstString, String secondString) {
         assertIllegalArgument(firstString, secondString);
         if (!isUpperCase(firstString, secondString)) {
             throw new IllegalArgumentException();
@@ -47,7 +86,7 @@ public class SimilarityChecker {
         int sameCount = getSameCount(counterA, counterB);
         int totalCount = getTotalCount(counterA, counterB);
 
-        return 40.0 * sameCount / totalCount;
+        return MAX_SCORE * sameCount / totalCount;
     }
 
     private int getSameCount(HashMap<Character, Integer> counterA, HashMap<Character, Integer> counterB) {
@@ -86,35 +125,22 @@ public class SimilarityChecker {
 
         return counter;
     }
+}
 
-    private void assertIllegalArgument(String firstString, String secondString) {
-        if (isNullString(firstString, secondString)) {
-            throw new IllegalArgumentException();
-        }
-        if (isStringLengthZero(firstString, secondString)) {
-            throw new IllegalArgumentException();
-        }
-    }
+public class SimilarityChecker {
+    LengthScore lenScore = new LengthScore();
+    AlphaScore alphaScore = new AlphaScore();
 
-    private boolean isNullString(String firstString, String secondString) {
-        return firstString == null || secondString == null;
-    }
 
-    private boolean isStringLengthZero(String firstString, String secondString) {
-        return firstString.length() == 0 || secondString.length() == 0;
-    }
-
-    private boolean isUpperCase(String firstString, String secondString) {
-        for (int idx = 0; idx < firstString.length(); idx++) {
-            if (firstString.charAt(idx) < 'A' || firstString.charAt(idx) > 'Z') {
-                return false;
-            }
-        }
-        for (int idx = 0; idx < secondString.length(); idx++) {
-            if (secondString.charAt(idx) < 'A' || secondString.charAt(idx) > 'Z') {
-                return false;
-            }
-        }
-        return true;
+    public double getScore(String firstString, String secondString) {
+        return lenScore.getScore(firstString, secondString)
+                + alphaScore.getScore(firstString, secondString);
     }
 }
+
+
+
+
+
+
+

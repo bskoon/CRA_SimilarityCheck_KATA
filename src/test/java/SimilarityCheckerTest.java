@@ -23,7 +23,7 @@ class SimilarityCheckerTest {
 
     private void assertIllegalInput(String str1, String str2) {
         try {
-            double score = similarityChecker.getLengthScore(str1, str2);
+            double score = similarityChecker.getScore(str1, str2);
             fail();
         } catch (IllegalArgumentException e) {
 
@@ -32,7 +32,7 @@ class SimilarityCheckerTest {
 
     private void assertIllegalInputLowerCase(String str1, String str2) {
         try {
-            double score = similarityChecker.getAlphaScore(str1, str2);
+            double score = similarityChecker.getScore(str1, str2);
             fail();
         } catch (IllegalArgumentException e) {
 
@@ -55,40 +55,11 @@ class SimilarityCheckerTest {
     }
 
     @Test
-    void lengthSame() {
-        assertEquals(60, similarityChecker.getLengthScore("ASD", "DSA"));
-    }
-    @Test
-    void lengthOverTwice() {
-        assertEquals(0, similarityChecker.getLengthScore("A", "BB"));
-    }
-
-    @Test
-    void lengthSubScoreTest() {
-        assertEquals((1.0-2.0/3.0)*60.0, similarityChecker.getLengthScore("AAABB", "BAA"));
-        assertEquals((1.0-1.0/2.0)*60.0, similarityChecker.getLengthScore("AA", "AAE"));
-    }
-
-    @Test
     void alphaUpperCaseTest() {
         assertIllegalInputLowerCase("ads", "dsa");
     }
 
     @Test
-    void alphaSameAlphabet() {
-        assertEquals(40.0, similarityChecker.getAlphaScore("ASD","DSA"));
-    }
-
-    @Test
-    void alphaDiffAlphabet() {
-        assertEquals(0.0, similarityChecker.getAlphaScore("A","BB"));
-    }
-
-    @Test
-    void alphaSubScore() {
-        assertEquals(20.0, similarityChecker.getAlphaScore("AA","AAE"));
-    }
-
     void totalScore() {
         assertEquals(100.0, similarityChecker.getScore("ASD","DSA"));
         assertEquals(60.0, similarityChecker.getScore("ABC","DEF"));
